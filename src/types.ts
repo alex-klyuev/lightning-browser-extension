@@ -617,6 +617,15 @@ export interface Publisher
   };
 }
 
+// WIP
+export interface Contact {
+  id: number;
+  host: string; // is this the LN address
+  name: string;
+  paymentsCount: number;
+  paymentsAmount: number;
+}
+
 export type SupportedExchanges = "alby" | "coindesk" | "yadio";
 
 export interface Invoice {

@@ -586,6 +586,17 @@
         }
       }
     },
+    "contacts": {
+      "favorites": {
+        "title": "Favorites",
+        "description": "Friendly Accounts to interact with more often"
+      },
+      "general": {
+        "title": "Your ⚡️ Contacts",
+        "description": "Store info of people you transact with frequently",
+        "no_info": "No contacts yet."
+      }
+    },
     "make_invoice": {
       "title": "Create Invoice",
       "amount": {
@@ -647,6 +658,7 @@
     "error": "Error",
     "settings": "Settings",
     "websites": "Websites",
+    "contacts": "Contacts",
     "sats_one": "sat",
     "sats_other": "sats",
     "loading": "loading",
@@ -768,6 +780,9 @@
     "publishers_table": {
       "payments": "payments",
       "used": "used"
+    },
+    "contacts_table": {
+      "payments": "payments"
     },
     "badge": {
       "label": {

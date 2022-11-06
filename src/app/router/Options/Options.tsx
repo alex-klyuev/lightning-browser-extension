@@ -21,6 +21,7 @@ import { ToastContainer } from "react-toastify";
 import Providers from "~/app/context/Providers";
 import RequireAuth from "~/app/router/RequireAuth";
 import getConnectorRoutes from "~/app/router/connectorRoutes";
+import Contacts from "~/app/screens/Contacts";
 import i18n from "~/i18n/i18nConfig";
 import {
   translationI18nNamespace,
@@ -47,6 +48,7 @@ function Options() {
               <Route path=":id" element={<Publisher />} />
               <Route index element={<Publishers />} />
             </Route>
+            <Route path="contacts" element={<Contacts />} />
             <Route path="send" element={<Send />} />
             <Route path="confirmPayment" element={<ConfirmPayment />} />
             <Route path="keysend" element={<Keysend />} />
@@ -118,6 +120,9 @@ const Layout = () => {
       <Navbar>
         <Navbar.Link href="/publishers">
           {t("websites", commonI18nNamespace)}
+        </Navbar.Link>
+        <Navbar.Link href="/contacts">
+          {t("contacts", commonI18nNamespace)}
         </Navbar.Link>
         <Navbar.Link href="/send">
           {t("actions.send", commonI18nNamespace)}
