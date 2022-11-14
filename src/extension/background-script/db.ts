@@ -6,6 +6,7 @@ import type {
   DbPayment,
   DbBlocklist,
   DbPermission,
+  DbContact,
 } from "~/types";
 
 class DB extends Dexie {
@@ -13,6 +14,7 @@ class DB extends Dexie {
   payments: Dexie.Table<DbPayment, number>;
   blocklist: Dexie.Table<DbBlocklist, number>;
   permissions: Dexie.Table<DbPermission, number>;
+  contacts: Dexie.Table<DbContact, number>;
 
   constructor() {
     super("LBE");
@@ -27,12 +29,18 @@ class DB extends Dexie {
     });
     this.version(3).stores({
       permissions: "++id,allowanceId,host,method,enabled,blocked,createdAt",
+      // adding lnAddress as a field to payments - what's the right way to do this
+      // payments:
+      //   "++id,allowanceId,host,location,name,lnAddress,description,totalAmount,totalFees,preimage,paymentRequest,paymentHash,destination,createdAt",
+      contacts:
+        "++id,lnAddress,name,imageURL,tag,enabled,favorited,lastPaymentAt,createdAt,links",
     });
     this.on("ready", this.loadFromStorage.bind(this));
     this.allowances = this.table("allowances");
     this.payments = this.table("payments");
     this.blocklist = this.table("blocklist");
     this.permissions = this.table("permissions");
+    this.contacts = this.table("contacts");
   }
 
   async saveToStorage() {
@@ -41,11 +49,13 @@ class DB extends Dexie {
     const blocklistArray = await this.blocklist.toArray();
     const permissionsArray = await this.permissions.toArray();
 
+    const contactsArray = await this.contacts.toArray();
     await browser.storage.local.set({
       allowances: allowanceArray,
       payments: paymentsArray,
       blocklist: blocklistArray,
       permissions: permissionsArray,
+      contacts: contactsArray,
     });
     return true;
   }
@@ -60,7 +70,7 @@ class DB extends Dexie {
     console.info("Loading DB data from storage");
 
     return browser.storage.local
-      .get(["allowances", "payments", "blocklist", "permissions"])
+      .get(["allowances", "payments", "blocklist", "permissions", "contacts"])
       .then((result) => {
         const allowancePromise = this.allowances.count().then((count) => {
           // if the DB already has entries we do not need to add the data from the browser storage. We then already have the data in the indexeddb
@@ -119,15 +129,31 @@ class DB extends Dexie {
               .catch(Dexie.BulkError, function (e) {
                 console.error("Failed to add permissions; ignoring", e);
               });
+            }
+          });
+
+        const contactsPromise = this.contacts.count().then((count) => {
+          // if the DB already has entries we do not need to add the data from the browser storage. We then already have the data in the indexeddb
+          if (count > 0) {
+            console.info(`Found ${count} contacts already in the DB`);
+            return;
+          } else if (result.contacts && result.contacts.length > 0) {
+            // adding the data from the browser storage
+            return this.contacts
+              .bulkAdd(result.contacts)
+              .catch(Dexie.BulkError, function (e) {
+                console.error("Failed to add contacts; ignoring", e);
+              });
           }
         });
 
-        // wait for all allowances and payments to be loaded
+        // wait for all data to be loaded
         return Promise.all([
           allowancePromise,
           paymentsPromise,
           blocklistPromise,
           permissionsPromise,
+          contactsPromise,
         ]);
       })
       .catch((e) => {

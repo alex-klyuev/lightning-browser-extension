@@ -6,21 +6,23 @@ import { Contact } from "~/types";
 
 type Props = {
   contacts: Contact[];
-  starFill: boolean;
-  handleStarClick: (id: number) => void;
+  favorite: boolean;
+  handleFavoriteClick: (id: number) => void;
+  navigateToContact: (id: number) => void;
 };
 
 export default function ContactsTable({
   contacts,
-  starFill,
-  handleStarClick,
+  favorite,
+  handleFavoriteClick,
+  navigateToContact,
 }: Props) {
   const { t: tComponents } = useTranslation("components", {
     keyPrefix: "contacts_table",
   });
   const { t: tCommon } = useTranslation("common");
 
-  const SunIcon = starFill ? SunIconFilled : SunIconOutline;
+  const SunIcon = favorite ? SunIconFilled : SunIconOutline;
 
   return (
     <div className="shadow overflow-hidden rounded-lg">
@@ -35,7 +37,7 @@ export default function ContactsTable({
                 <SunIcon
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleStarClick(contact.id);
+                    handleFavoriteClick(contact.id);
                   }}
                 />
               </td>
@@ -58,10 +60,10 @@ export default function ContactsTable({
                       <p className="text-lg inline mr-2 dark:text-white">
                         {contact.name}
                       </p>
-                      {/** what is "Badge", any relevancy to contacts? Not included in design */}
+                      {/** Badge can be included if budget added for creator use case */}
                     </div>
                     <div className="text-sm text-gray-500 dark:text-neutral-400">
-                      {contact.host} • {contact.paymentsCount}{" "}
+                      {contact.lnAddress} • {contact.paymentsCount}{" "}
                       {tComponents("payments")}{" "}
                       {contact.paymentsAmount > 0 && (
                         <span>
@@ -73,7 +75,10 @@ export default function ContactsTable({
                   </div>
                 </div>
               </td>
-              <td className="cursor-pointer w-10">
+              <td
+                className="cursor-pointer w-10"
+                onClick={() => navigateToContact(contact.id)}
+              >
                 <CaretRightIcon className="h-6 w-6 text-gray-500" />
               </td>
             </tr>

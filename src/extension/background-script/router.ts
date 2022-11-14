@@ -2,6 +2,7 @@ import * as accounts from "./actions/accounts";
 import * as allowances from "./actions/allowances";
 import * as blocklist from "./actions/blocklist";
 import * as cache from "./actions/cache";
+import * as contacts from "./actions/contacts";
 import * as ln from "./actions/ln";
 import lnurl, { auth } from "./actions/lnurl";
 import * as nostr from "./actions/nostr";
@@ -18,6 +19,10 @@ const routes = {
   listAllowances: allowances.list,
   deleteAllowance: allowances.deleteAllowance,
   updateAllowance: allowances.updateAllowance,
+  addContact: contacts.add,
+  getContactById: contacts.getById,
+  listContacts: contacts.list,
+  updateContact: contacts.updateContact,
   lock: accounts.lock,
   unlock: accounts.unlock,
   getInfo: ln.getInfo,

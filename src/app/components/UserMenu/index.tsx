@@ -7,6 +7,7 @@ import {
   ReceiveIcon,
   QuestionIcon,
   RocketIcon,
+  ContactsIcon,
 } from "@bitcoin-design/bitcoin-icons-react/filled";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -54,6 +55,14 @@ export default function UserMenu() {
         >
           <TransactionsIcon className="h-5 w-5 mr-2 text-gray-700 dark:text-neutral-300" />
           {tCommon("websites")}
+        </Menu.ItemButton>
+        <Menu.ItemButton
+          onClick={() => {
+            openOptions("contacts");
+          }}
+        >
+          <ContactsIcon className="h-5 w-5 mr-2 text-gray-700 dark:text-neutral-300" />
+          {tCommon("contacts")}
         </Menu.ItemButton>
         <Menu.ItemButton
           onClick={() => {

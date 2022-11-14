@@ -595,6 +595,11 @@
         "title": "Your ⚡️ Contacts",
         "description": "Store info of people you transact with frequently",
         "no_info": "No contacts yet."
+      },
+      "contact": {
+        "transaction_history": {
+          "title": "Transaction History"
+        }
       }
     },
     "make_invoice": {

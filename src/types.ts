@@ -308,6 +308,33 @@ export interface MessageAllowanceGetById extends MessageDefault {
   action: "getAllowanceById";
 }
 
+export interface MessageContactAdd extends MessageDefault {
+  args: {
+    lnAddress: Contact["lnAddress"];
+    name: Contact["name"];
+    imageURL: Contact["imageURL"];
+    links: Contact["links"];
+  };
+  action: "addContact";
+}
+
+export interface MessageContactGetById extends MessageDefault {
+  args: { id: Contact["id"] };
+  action: "getContactById";
+}
+
+export interface MessageContactUpdate extends MessageDefault {
+  args: {
+    id: Contact["id"];
+    favorited?: Contact["favorited"];
+  };
+  action: "updateContact";
+}
+
+export interface MessageContactList extends MessageDefault {
+  action: "listContacts";
+}
+
 export interface MessageWebLnLnurl extends MessageDefault {
   args: { lnurlEncoded: string };
   public: boolean;
@@ -483,6 +510,7 @@ export type Transaction = {
 
 export interface DbPayment {
   allowanceId: string;
+  // lnAddress: string; will need to update tests to include this
   createdAt: string;
   description: string;
   destination: string;
@@ -573,6 +601,26 @@ export interface Allowance extends Omit<DbAllowance, "id"> {
   usedBudget: number;
 }
 
+export interface DbContact {
+  createdAt?: string;
+  enabled?: boolean;
+  favorited?: boolean;
+  id?: number;
+  imageURL?: string;
+  lastPaymentAt?: number;
+  links?: string[];
+  lnAddress: string;
+  name?: string;
+  tag?: string; // not sure what tag is
+  // budget could be added in for creator / streaming sats use case
+}
+export interface Contact extends Omit<DbContact, "id"> {
+  id: number;
+  payments: Payment[];
+  paymentsAmount: number;
+  paymentsCount: number;
+}
+
 export interface SettingsStorage {
   browserNotifications: boolean;
   websiteEnhancements: boolean;
@@ -615,15 +663,6 @@ export interface Publisher
     color: string;
     textColor: string;
   };
-}
-
-// WIP
-export interface Contact {
-  id: number;
-  host: string; // is this the LN address
-  name: string;
-  paymentsCount: number;
-  paymentsAmount: number;
 }
 
 export type SupportedExchanges = "alby" | "coindesk" | "yadio";

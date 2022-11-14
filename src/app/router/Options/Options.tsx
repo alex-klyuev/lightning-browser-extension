@@ -2,6 +2,8 @@ import Container from "@components/Container";
 import Navbar from "@components/Navbar";
 import Accounts from "@screens/Accounts";
 import ConfirmPayment from "@screens/ConfirmPayment";
+import Contact from "@screens/Contact";
+import Contacts from "@screens/Contacts";
 import Keysend from "@screens/Keysend";
 import LNURLAuth from "@screens/LNURLAuth";
 import LNURLChannel from "@screens/LNURLChannel";
@@ -21,7 +23,6 @@ import { ToastContainer } from "react-toastify";
 import Providers from "~/app/context/Providers";
 import RequireAuth from "~/app/router/RequireAuth";
 import getConnectorRoutes from "~/app/router/connectorRoutes";
-import Contacts from "~/app/screens/Contacts";
 import i18n from "~/i18n/i18nConfig";
 import {
   translationI18nNamespace,
@@ -48,7 +49,11 @@ function Options() {
               <Route path=":id" element={<Publisher />} />
               <Route index element={<Publishers />} />
             </Route>
-            <Route path="contacts" element={<Contacts />} />
+            <Route index element={<Navigate to="/contacts" replace />} />
+            <Route path="contacts">
+              <Route path=":id" element={<Contact />} />
+              <Route index element={<Contacts />} />
+            </Route>
             <Route path="send" element={<Send />} />
             <Route path="confirmPayment" element={<ConfirmPayment />} />
             <Route path="keysend" element={<Keysend />} />
