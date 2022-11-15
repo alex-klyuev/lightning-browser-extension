@@ -15,13 +15,13 @@ const getById = async (message: MessageContactGetById) => {
     };
 
     contact.paymentsCount = await db.payments
-      .where("lnAddress")
-      .equalsIgnoreCase(dbContact.lnAddress)
+      .where("contactId")
+      .equalsIgnoreCase(String(dbContact.id))
       .count();
 
     const dbPayments = await db.payments
-      .where("lnAddress")
-      .equalsIgnoreCase(dbContact.lnAddress)
+      .where("contactId")
+      .equalsIgnoreCase(String(dbContact.id))
       .reverse()
       .toArray();
 

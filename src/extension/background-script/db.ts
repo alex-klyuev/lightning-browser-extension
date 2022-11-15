@@ -29,9 +29,8 @@ class DB extends Dexie {
     });
     this.version(3).stores({
       permissions: "++id,allowanceId,host,method,enabled,blocked,createdAt",
-      // adding lnAddress as a field to payments - what's the right way to do this
-      // payments:
-      //   "++id,allowanceId,host,location,name,lnAddress,description,totalAmount,totalFees,preimage,paymentRequest,paymentHash,destination,createdAt",
+      payments:
+        "++id,allowanceId,contactId,host,location,name,description,totalAmount,totalFees,preimage,paymentRequest,paymentHash,destination,createdAt",
       contacts:
         "++id,lnAddress,name,imageURL,tag,enabled,favorited,lastPaymentAt,createdAt,links",
     });
@@ -129,8 +128,8 @@ class DB extends Dexie {
               .catch(Dexie.BulkError, function (e) {
                 console.error("Failed to add permissions; ignoring", e);
               });
-            }
-          });
+          }
+        });
 
         const contactsPromise = this.contacts.count().then((count) => {
           // if the DB already has entries we do not need to add the data from the browser storage. We then already have the data in the indexeddb

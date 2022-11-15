@@ -12,16 +12,14 @@ import { Contact } from "~/types";
 type ContactsHash = Record<number, Contact>;
 
 // Dummy data to seed database
-const seedData = [
+const seedContactData = [
   {
-    id: 0,
     lnAddress: "alby1@getalby.com",
     name: "Alby 1",
     imageURL: "assets/icons/alby_icon_yellow_48x48.png",
     links: [],
   },
   {
-    id: 1,
     lnAddress: "alby2@getalby.com",
     name: "Alby 2",
     imageURL: "assets/icons/alby_icon_yellow_48x48.png",
@@ -29,10 +27,11 @@ const seedData = [
   },
 ];
 
+// Seed database. Refresh once to see contacts
 (async () => {
-  await Promise.all([
-    ...seedData.map((contact) => utils.call("addContact", contact)),
-  ]);
+  for (const contact of seedContactData) {
+    await utils.call("addContact", contact);
+  }
 })();
 
 function Contacts() {

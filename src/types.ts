@@ -510,7 +510,7 @@ export type Transaction = {
 
 export interface DbPayment {
   allowanceId: string;
-  // lnAddress: string; will need to update tests to include this
+  contactId?: DbContact["id"];
   createdAt: string;
   description: string;
   destination: string;
@@ -605,7 +605,7 @@ export interface DbContact {
   createdAt?: string;
   enabled?: boolean;
   favorited?: boolean;
-  id?: number;
+  id: number;
   imageURL?: string;
   lastPaymentAt?: number;
   links?: string[];

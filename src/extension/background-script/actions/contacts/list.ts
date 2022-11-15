@@ -21,13 +21,13 @@ const list = async (message: MessageContactList) => {
       };
 
       tmpContact.paymentsCount = await db.payments
-        .where("lnAddress")
-        .equalsIgnoreCase(tmpContact.lnAddress)
+        .where("contactId")
+        .equalsIgnoreCase(String(tmpContact.id))
         .count();
 
       const payments = await db.payments
-        .where("lnAddress")
-        .equalsIgnoreCase(tmpContact.lnAddress)
+        .where("contactId")
+        .equalsIgnoreCase(String(tmpContact.id))
         .reverse()
         .toArray();
 
