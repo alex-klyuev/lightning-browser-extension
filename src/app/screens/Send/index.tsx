@@ -36,8 +36,13 @@ function Send() {
       setLoading(true);
 
       let lnurl = lnurlLib.findLnurl(invoice);
-      if (!lnurl && lnurlLib.isLightningAddress(invoice)) {
+      let lnAddress;
+      const isLightningAddress = lnurlLib.isLightningAddress(invoice);
+
+      if (!lnurl && isLightningAddress) {
         lnurl = invoice;
+        // TODO: lnAddress should probably be part of LNURLDetails
+        lnAddress = lnurl;
       }
 
       if (lnurl) {
@@ -72,6 +77,7 @@ function Send() {
             state: {
               args: {
                 lnurlDetails,
+                lnAddress,
               },
             },
           });

@@ -21,15 +21,10 @@ const add = async (message: MessageContactAdd) => {
     //   totalBudget: totalBudget,
     // });
   } else {
-    // assign id as next largest id value
-    const ids = (await db.contacts.toArray()).map(({ id }) => id);
-    const id = ids.length ? Math.max(...ids) + 1 : 1;
-
     const dbContact: DbContact = {
       createdAt: Date.now().toString(),
       enabled: true,
       lnAddress,
-      id,
       imageURL,
       name,
       links,

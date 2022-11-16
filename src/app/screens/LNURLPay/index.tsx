@@ -38,6 +38,7 @@ const Dd = ({ children }: { children: React.ReactNode }) => (
 function LNURLPay() {
   const navState = useNavigationState();
   const details = navState.args?.lnurlDetails as LNURLPayServiceResponse;
+  const lnAddress = navState.args?.lnAddress;
   const {
     isLoading: isLoadingSettings,
     settings,
@@ -166,6 +167,7 @@ function LNURLPay() {
           origin: {
             ...navState.origin,
             name: getRecipient(),
+            lnAddress,
           },
         }
       );

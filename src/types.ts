@@ -53,6 +53,7 @@ export interface OriginData {
   host: string;
   pathname: string;
   name: string;
+  lnAddress?: string;
   description: string;
   icon: string;
   metaData: MetaData;
@@ -127,6 +128,7 @@ export type NavigationState = {
   origin?: OriginData; // only defoned if coming via "Prompt", can be empty if a LNURL-action is being used via "Send" within the "PopUp"
   args?: {
     lnurlDetails: LNURLDetails;
+    lnAddress?: string;
     amountEditable?: boolean;
     memoEditable?: boolean;
     invoiceAttributes?: RequestInvoiceArgs;
@@ -605,7 +607,7 @@ export interface DbContact {
   createdAt?: string;
   enabled?: boolean;
   favorited?: boolean;
-  id: number;
+  id?: number;
   imageURL?: string;
   lastPaymentAt?: number;
   links?: string[];

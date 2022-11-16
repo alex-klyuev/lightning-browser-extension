@@ -4,11 +4,12 @@ const persistSuccessfullPayment = async (message, data) => {
   const name = data?.origin?.name;
   const host = data?.origin?.host;
   const location = data?.origin?.location;
+  const lnAddress = data?.origin?.lnAddress;
   const paymentResponse = data.response;
   const route = paymentResponse.data.route;
   const { total_amt, total_fees } = route;
 
-  await db.payments.add({
+  const payment = {
     host,
     location,
     name,
@@ -19,7 +20,27 @@ const persistSuccessfullPayment = async (message, data) => {
     totalAmount: total_amt,
     totalFees: total_fees,
     createdAt: Date.now(),
-  });
+  };
+
+  // For payments to LN addresses, check if a contact already exists.
+  // If not, add to contacts database as well.
+  if (lnAddress) {
+    let contactId;
+    const contact = await db.contacts
+      .where("lnAddress")
+      .equalsIgnoreCase(lnAddress)
+      .first();
+
+    if (contact) {
+      contactId = contact.id;
+    } else {
+      contactId = await db.contacts.add({ lnAddress, enabled: false });
+    }
+
+    payment.contactId = contactId;
+  }
+
+  await db.payments.add(payment);
   await db.saveToStorage();
   console.info(`Persisted payment ${paymentResponse.data.paymentHash}`);
   return true;
