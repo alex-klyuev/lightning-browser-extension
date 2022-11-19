@@ -1,6 +1,5 @@
 import { CaretRightIcon } from "@bitcoin-design/bitcoin-icons-react/filled";
-import { SunIcon as SunIconFilled } from "@bitcoin-design/bitcoin-icons-react/filled";
-import { SunIcon as SunIconOutline } from "@bitcoin-design/bitcoin-icons-react/outline";
+import { StarIcon } from "@components/icons";
 import { useTranslation } from "react-i18next";
 import { Contact } from "~/types";
 
@@ -22,8 +21,6 @@ export default function ContactsTable({
   });
   const { t: tCommon } = useTranslation("common");
 
-  const SunIcon = favorite ? SunIconFilled : SunIconOutline;
-
   return (
     <div className="shadow overflow-hidden rounded-lg">
       <table className="min-w-full">
@@ -34,14 +31,18 @@ export default function ContactsTable({
               className="cursor-pointer hover:bg-gray-50 transition duration-200 dark:hover:bg-neutral-800"
             >
               <td className="px-4 py-6 whitespace-nowrap">
-                <SunIcon
+                <StarIcon
+                  filled={favorite}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleFavoriteClick(contact.id);
                   }}
                 />
               </td>
-              <td className="cursor-pointer px-4 py-6 whitespace-nowrap">
+              <td
+                className="cursor-pointer px-4 py-6 whitespace-nowrap"
+                onClick={() => navigateToContact(contact.id)}
+              >
                 <div className="flex items-center">
                   <div className="shrink-0">
                     <img

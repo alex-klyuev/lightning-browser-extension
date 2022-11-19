@@ -1,3 +1,4 @@
+import Button from "@components/Button";
 import ContactsTable from "@components/ContactsTable";
 import Container from "@components/Container";
 import { useEffect, useState } from "react";
@@ -34,18 +35,21 @@ const seedContactData = [
   }
 })();
 
-function Contacts() {
+function ContactsHome() {
   const { t } = useTranslation("translation", {
     keyPrefix: "contacts",
   });
 
-  // TODO: add db index to indicate if favorite or not (favorited?)
   const [favorites, setFavorites] = useState<ContactsHash>({});
   const [general, setGeneral] = useState<ContactsHash>({});
   const navigate = useNavigate();
 
   function navigateToContact(id: number) {
     navigate(`/contacts/${id}`);
+  }
+
+  function navigateToAddContact() {
+    navigate(`/addContact`);
   }
 
   const addToFavorites = async (id: number) => {
@@ -160,13 +164,23 @@ function Contacts() {
         </div>
       ) : null}
 
-      <h2 className="mt-12 mb-2 text-2xl font-bold dark:test-white">
-        {t("general.title")}
-      </h2>
+      <div className="py-4 flex justify-between items-center">
+        <div>
+          <h2 className="mt-12 mb-2 text-2xl font-bold dark:test-white">
+            {t("general.title")}
+          </h2>
 
-      <p className="mb-6 text-gray-500 dark:text-neutral-500">
-        {t("general.description")}
-      </p>
+          <p className="mb-6 text-gray-500 dark:text-neutral-500">
+            {t("general.description")}
+          </p>
+        </div>
+
+        <Button
+          onClick={navigateToAddContact}
+          label={t("add_contact")}
+          primary
+        />
+      </div>
 
       {generalArray.length > 0 ? (
         <ContactsTable
@@ -182,4 +196,4 @@ function Contacts() {
   );
 }
 
-export default Contacts;
+export default ContactsHome;

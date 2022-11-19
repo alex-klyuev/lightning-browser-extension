@@ -596,11 +596,19 @@
         "description": "Store info of people you transact with frequently",
         "no_info": "No contacts yet."
       },
+      "add_contact": "Add Contact",
       "contact": {
         "transaction_history": {
           "title": "Transaction History"
         }
       }
+    },
+    "add_contact": {
+      "title": "New Contact",
+      "add": "Add",
+      "name": "Name",
+      "lightning_address": "Lightning Address",
+      "links": "Links"
     },
     "make_invoice": {
       "title": "Create Invoice",

@@ -2,8 +2,6 @@ import Container from "@components/Container";
 import Navbar from "@components/Navbar";
 import Accounts from "@screens/Accounts";
 import ConfirmPayment from "@screens/ConfirmPayment";
-import Contact from "@screens/Contact";
-import Contacts from "@screens/Contacts";
 import Keysend from "@screens/Keysend";
 import LNURLAuth from "@screens/LNURLAuth";
 import LNURLChannel from "@screens/LNURLChannel";
@@ -17,6 +15,9 @@ import Send from "@screens/Send";
 import Settings from "@screens/Settings";
 import Unlock from "@screens/Unlock";
 import ChooseConnector from "@screens/connectors/ChooseConnector";
+import AddContact from "@screens/contacts/AddContact";
+import Contact from "@screens/contacts/Contact";
+import ContactsHome from "@screens/contacts/ContactsHome";
 import { useTranslation } from "react-i18next";
 import { HashRouter, Navigate, Outlet, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -52,8 +53,9 @@ function Options() {
             <Route index element={<Navigate to="/contacts" replace />} />
             <Route path="contacts">
               <Route path=":id" element={<Contact />} />
-              <Route index element={<Contacts />} />
+              <Route index element={<ContactsHome />} />
             </Route>
+            <Route path="addContact" element={<AddContact />} />
             <Route path="send" element={<Send />} />
             <Route path="confirmPayment" element={<ConfirmPayment />} />
             <Route path="keysend" element={<Keysend />} />
