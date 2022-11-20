@@ -8,24 +8,26 @@ import { PlusIcon, MinusIcon } from "@components/icons";
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import utils from "~/common/lib/utils";
+import { DbContact } from "~/types";
 
 const DEFAULT_IMAGE = "assets/icons/profile.jpeg";
 
 function AddContact() {
   const { t } = useTranslation("translation", { keyPrefix: "add_contact" });
 
-  const [image, setImage] = useState<string>(DEFAULT_IMAGE);
+  const [imageFile, setImageFile] = useState<File>();
   const [name, setName] = useState<string>("");
   const [lnAddress, setLnAddress] = useState<string>("");
-  const [links, setLinks] = useState<string[]>(["test1", "test2", ""]);
+  const [links, setLinks] = useState<string[]>([""]);
   const navigate = useNavigate();
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (files) {
-      const img = files[0];
-      if (!img) return;
-      setImage(URL.createObjectURL(img));
+      const imageFile = files[0];
+      if (!imageFile) return;
+      setImageFile(imageFile);
     }
   };
 
@@ -44,7 +46,31 @@ function AddContact() {
     setLinks([...links]);
   };
 
-  // const handleSubmit = () => {};
+  const readFile = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result);
+      fr.onerror = reject;
+      fr.readAsDataURL(file);
+    });
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const imageURL = imageFile && (await readFile(imageFile));
+
+    const {
+      contact: { id },
+    } = await utils.call<{ contact: DbContact }>("addContact", {
+      name,
+      lnAddress,
+      imageURL,
+      links,
+    });
+
+    navigate(`/contacts/${id}`);
+  };
 
   return (
     <div className="h-full flex flex-col overflow-y-auto no-scrollbar">
@@ -52,24 +78,25 @@ function AddContact() {
         title={t("title")}
         headerLeft={
           <IconButton
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/contacts")}
             icon={<CaretLeftIcon className="w-4 h-4" />}
           />
         }
       />
 
-      <form /** onSubmit={handleSubmit} */ className="h-full">
+      <form onSubmit={(e) => handleSubmit(e)} className="h-full">
         <Container justifyBetween maxWidth="sm">
           <div className="flex justify-center">
             <label htmlFor="file-upload" className="cursor-pointer">
               <img
                 className="m-2 mt-8 shrink-0 bg-white border-solid border-2 border-white object-cover rounded-lg shadow-2xl w-20 h-20"
-                src={image}
+                src={imageFile ? URL.createObjectURL(imageFile) : DEFAULT_IMAGE}
               />
               <input
                 id="file-upload"
                 name="file-upload"
                 type="file"
+                accept="image/*"
                 className="sr-only"
                 onChange={handleImageUpload}
               />

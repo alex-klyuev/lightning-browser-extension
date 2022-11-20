@@ -20,7 +20,7 @@ function Contact() {
   const {
     isLoading: isLoadingSettings,
     settings,
-    getFiatValue,
+    getFormattedFiat,
   } = useSettings();
 
   const hasFetchedData = useRef(false);
@@ -34,6 +34,7 @@ function Contact() {
         const response = await utils.call<TContact>("getContactById", {
           id: parseInt(id),
         });
+
         setContact(response);
 
         const payments: Transaction[] = response.payments.map((payment) => ({
@@ -47,7 +48,7 @@ function Contact() {
 
         for (const payment of payments) {
           const totalAmountFiat = settings.showFiat
-            ? await getFiatValue(payment.totalAmount)
+            ? await getFormattedFiat(payment.totalAmount)
             : "";
           payment.totalAmountFiat = totalAmountFiat;
         }
@@ -57,7 +58,7 @@ function Contact() {
       console.error(e);
       if (e instanceof Error) toast.error(`Error: ${e.message}`);
     }
-  }, [id, settings.showFiat, getFiatValue]);
+  }, [id, settings.showFiat, getFormattedFiat]);
 
   useEffect(() => {
     // Run once.

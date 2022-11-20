@@ -5,7 +5,7 @@ import db from "../../db";
 const add = async (message: MessageContactAdd) => {
   const { lnAddress, name, imageURL, links } = message.args;
 
-  const contact = await db.contacts
+  let contact = await db.contacts
     .where("lnAddress")
     .equalsIgnoreCase(lnAddress)
     .first();
@@ -32,7 +32,8 @@ const add = async (message: MessageContactAdd) => {
       tag: "",
       favorited: false,
     };
-    await db.contacts.add(dbContact);
+    const id = await db.contacts.add(dbContact);
+    contact = await db.contacts.get({ id });
   }
   await db.saveToStorage();
 
