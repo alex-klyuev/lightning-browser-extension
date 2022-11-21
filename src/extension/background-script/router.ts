@@ -24,6 +24,7 @@ const routes = {
   getContactById: contacts.getById,
   listContacts: contacts.list,
   updateContact: contacts.updateContact,
+  getContactByLnAddress: contacts.getByLnAddress,
   lock: accounts.lock,
   unlock: accounts.unlock,
   getInfo: ln.getInfo,

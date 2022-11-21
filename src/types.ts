@@ -325,6 +325,11 @@ export interface MessageContactGetById extends MessageDefault {
   action: "getContactById";
 }
 
+export interface MessageContactGetByLnAddress extends MessageDefault {
+  args: { lnAddress: Contact["lnAddress"] };
+  action: "getContactByLnAddress";
+}
+
 export interface MessageContactDelete extends MessageDefault {
   args: {
     id: Contact["id"];

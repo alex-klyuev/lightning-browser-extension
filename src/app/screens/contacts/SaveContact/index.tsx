@@ -8,6 +8,7 @@ import { PlusIcon, MinusIcon } from "@components/icons";
 import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import utils from "~/common/lib/utils";
 import { Contact, DbContact } from "~/types";
 
@@ -90,6 +91,31 @@ function SaveContact() {
     setLinks([...links]);
   };
 
+  const isLnAddressValid = async (lnAddress: string) => {
+    // empty strings
+    if (!lnAddress) {
+      toast.error("Must include LN address.");
+      return false;
+    }
+
+    // check if LN already exists in database
+    const { contact } = await utils.call<{ contact: DbContact }>(
+      "getContactByLnAddress",
+      { lnAddress }
+    );
+    if (!contact) return true;
+
+    // is valid to add/edit if it's not enabled (ignore if it's the current contact)
+    const { id, enabled } = contact;
+
+    if (enabled && id !== contactId) {
+      toast.error("LN address associated with other contact.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -99,13 +125,18 @@ function SaveContact() {
       if (link) cleanLinks.push(link);
     });
 
+    const cleanLnAddress = lnAddress.trim();
+
+    const isValid = await isLnAddressValid(cleanLnAddress);
+    if (!isValid) return;
+
     switch (action) {
       case SaveContactActionType.ADD: {
         const { contact } = await utils.call<{ contact: DbContact }>(
           "addContact",
           {
             name: name.trim(),
-            lnAddress: lnAddress.trim(),
+            lnAddress: cleanLnAddress,
             imageURL,
             links: cleanLinks,
           }
@@ -120,7 +151,7 @@ function SaveContact() {
         await utils.call<{ contact: DbContact }>("updateContact", {
           id: contactId,
           name: name.trim(),
-          lnAddress: lnAddress.trim(),
+          lnAddress: cleanLnAddress,
           imageURL,
           links: cleanLinks,
         });

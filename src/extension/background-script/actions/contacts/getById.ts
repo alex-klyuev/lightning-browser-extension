@@ -1,5 +1,5 @@
-import { MessageContactGetById, Contact, Payment } from "../../../../types";
-import db from "../../db";
+import db from "~/extension/background-script/db";
+import { MessageContactGetById, Contact, Payment } from "~/types";
 
 const getById = async (message: MessageContactGetById) => {
   const { id } = message.args;
@@ -45,9 +45,6 @@ const getById = async (message: MessageContactGetById) => {
       data: contact,
     };
   } else {
-    // (since this is based off of allowance)
-    // even if it's not enabled, wouldn't it still be stored in db?
-    // confused by if (dbAllowance)
     return { data: { enabled: false } };
   }
 };
