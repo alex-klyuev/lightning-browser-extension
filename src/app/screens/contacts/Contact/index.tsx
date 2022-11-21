@@ -13,6 +13,8 @@ import { useSettings } from "~/app/context/SettingsContext";
 import utils from "~/common/lib/utils";
 import { Contact as TContact, Transaction } from "~/types";
 
+import { SaveContactActionType } from "../SaveContact";
+
 dayjs.extend(relativeTime);
 
 function Contact() {
@@ -83,7 +85,12 @@ function Contact() {
       <Menu.List position="right">
         <Menu.ItemButton
           onClick={() => {
-            console.info("placeholder");
+            navigate("/saveContact", {
+              state: {
+                action: SaveContactActionType.EDIT,
+                contact,
+              },
+            });
           }}
         >
           {tCommon("actions.edit")}

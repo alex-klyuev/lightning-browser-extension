@@ -336,6 +336,10 @@ export interface MessageContactUpdate extends MessageDefault {
   args: {
     id: Contact["id"];
     favorited?: Contact["favorited"];
+    lnAddress?: Contact["lnAddress"];
+    name?: Contact["name"];
+    imageURL?: Contact["imageURL"];
+    links?: Contact["links"];
   };
   action: "updateContact";
 }

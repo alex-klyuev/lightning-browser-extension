@@ -606,7 +606,6 @@
     },
     "add_contact": {
       "title": "New Contact",
-      "add": "Add",
       "name": "Name",
       "lightning_address": "Lightning Address",
       "links": "Links"
@@ -687,6 +686,7 @@
     "message": "Message",
     "help": "Help",
     "actions": {
+      "add": "Add",
       "back": "Back",
       "delete": "Delete",
       "edit": "Edit",

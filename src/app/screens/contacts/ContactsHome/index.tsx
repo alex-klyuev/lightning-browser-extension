@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import utils from "~/common/lib/utils";
 import { Contact } from "~/types";
 
+import { SaveContactActionType } from "../SaveContact";
+
 // Store contacts in an object by id for easy lookup and modification
 // from general -> favorites and vice versa
 type ContactsHash = Record<number, Contact>;
@@ -25,8 +27,8 @@ function ContactsHome() {
     navigate(`/contacts/${id}`);
   }
 
-  function navigateToAddContact() {
-    navigate(`/addContact`);
+  function navigateToSaveContact() {
+    navigate(`/saveContact`, { state: { action: SaveContactActionType.ADD } });
   }
 
   const addToFavorites = async (id: number) => {
@@ -153,7 +155,7 @@ function ContactsHome() {
         </div>
 
         <Button
-          onClick={navigateToAddContact}
+          onClick={navigateToSaveContact}
           label={t("add_contact")}
           primary
         />
