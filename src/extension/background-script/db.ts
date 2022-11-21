@@ -32,7 +32,7 @@ class DB extends Dexie {
       payments:
         "++id,allowanceId,contactId,host,location,name,description,totalAmount,totalFees,preimage,paymentRequest,paymentHash,destination,createdAt",
       contacts:
-        "++id,lnAddress,name,imageURL,tag,enabled,favorited,lastPaymentAt,createdAt,links",
+        "++id,&lnAddress,name,tag,enabled,favorited,lastPaymentAt,createdAt,links",
     });
     this.on("ready", this.loadFromStorage.bind(this));
     this.allowances = this.table("allowances");

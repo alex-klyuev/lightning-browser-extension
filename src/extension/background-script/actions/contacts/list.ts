@@ -2,10 +2,10 @@ import db from "~/extension/background-script/db";
 import type { MessageContactList, Contact } from "~/types";
 
 const list = async (message: MessageContactList) => {
-  const dbContacts = await db.contacts.toArray();
-  // .toCollection()
-  // .reverse()
-  // .sortBy("lastPaymentAt"); add in once lastPayment functionality added
+  const dbContacts = await db.contacts
+    .toCollection()
+    .reverse()
+    .sortBy("lastPaymentAt");
 
   const contacts: Contact[] = [];
 

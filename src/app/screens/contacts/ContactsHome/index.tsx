@@ -12,29 +12,6 @@ import { Contact } from "~/types";
 // from general -> favorites and vice versa
 type ContactsHash = Record<number, Contact>;
 
-// Dummy data to seed database
-const seedContactData = [
-  {
-    lnAddress: "alby1@getalby.com",
-    name: "Alby 1",
-    imageURL: "assets/icons/alby_icon_yellow_48x48.png",
-    links: [],
-  },
-  {
-    lnAddress: "alby2@getalby.com",
-    name: "Alby 2",
-    imageURL: "assets/icons/alby_icon_yellow_48x48.png",
-    links: [],
-  },
-];
-
-// Seed database. Refresh once to see contacts
-(async () => {
-  for (const contact of seedContactData) {
-    await utils.call("addContact", contact);
-  }
-})();
-
 function ContactsHome() {
   const { t } = useTranslation("translation", {
     keyPrefix: "contacts",
@@ -182,14 +159,16 @@ function ContactsHome() {
         />
       </div>
 
-      {generalArray.length > 0 ? (
+      {generalArray.length > 0 && (
         <ContactsTable
           contacts={generalArray}
           favorite={false}
           handleFavoriteClick={addToFavorites}
           navigateToContact={navigateToContact}
         />
-      ) : (
+      )}
+
+      {generalArray.length + favoritesArray.length === 0 && (
         <p className="dark:text-white"> {t("general.no_info")}</p>
       )}
     </Container>

@@ -1,3 +1,4 @@
+import Container from "@components/Container";
 import { classNames } from "~/app/utils/index";
 
 // TODO: if no image set use image based on i.e. domain
@@ -11,6 +12,7 @@ export type Props = {
   url?: string;
   isCard?: boolean;
   isSmall?: boolean;
+  Options?: React.ReactNode;
   children?: React.ReactNode;
 };
 
@@ -21,6 +23,7 @@ export default function PublisherCard({
   url,
   isCard = true,
   isSmall = true,
+  Options,
   children,
 }: Props) {
   if (!title) {
@@ -28,64 +31,71 @@ export default function PublisherCard({
     description = undefined;
   }
   return (
-    <div
-      className={classNames(
-        isSmall ? "p-2" : "flex-col justify-center p-4",
-        isCard && "drop-shadow rounded-lg mt-4",
-        !image && "h-24",
-        "flex items-center bg-white dark:bg-surface-02dp"
-      )}
-    >
-      {image && (
-        <img
-          className={`m-2 shrink-0 bg-white border-solid border-2 border-white object-cover rounded-lg shadow-2xl ${
-            isSmall ? "w-14 h-14 mr-4" : "w-20 h-20"
-          }`}
-          src={image || DEFAULT_IMAGE}
-          alt={`${title} logo`}
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.onerror = null;
-            target.src = DEFAULT_IMAGE;
-          }}
-        />
-      )}
-      <div
-        className={
-          "flex flex-col overflow-hidden w-full " +
-          (isSmall ? "" : "text-center ") +
-          (isSmall && !image && "ml-4")
-        }
-      >
-        <h2
-          className={
-            "text-xl font-semibold dark:text-white overflow-hidden text-ellipsis " +
-            (isSmall ? "my-1" : "my-2")
-          }
-        >
-          {title}
-        </h2>
-        {url && (
-          <a
-            href={`https://${url}`}
-            title={url}
-            target="_blank"
-            className="text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap"
-            rel="noreferrer"
+    <div className="bg-white dark:bg-surface-02dp">
+      <Container>
+        <div className="flex relative">
+          <div
+            className={classNames(
+              isSmall ? "p-2" : "flex-col justify-center p-4",
+              isCard && "drop-shadow rounded-lg mt-4",
+              !image && "h-24",
+              "flex items-center flex-grow"
+            )}
           >
-            {url}
-          </a>
-        )}
-        {!url && description && (
-          <p
-            title={description}
-            className="text-gray-500 dark:text-gray-400 mb-2 line-clamp-2"
-          >
-            {description}
-          </p>
-        )}
-      </div>
-      {children && <div className="mt-2 text-center">{children}</div>}
+            {image && (
+              <img
+                className={`m-2 shrink-0 bg-white border-solid border-2 border-white object-cover rounded-lg shadow-2xl ${
+                  isSmall ? "w-14 h-14 mr-4" : "w-20 h-20"
+                }`}
+                src={image || DEFAULT_IMAGE}
+                alt={`${title} logo`}
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = DEFAULT_IMAGE;
+                }}
+              />
+            )}
+            <div
+              className={
+                "flex flex-col overflow-hidden w-full " +
+                (isSmall ? "" : "text-center ") +
+                (isSmall && !image && "ml-4")
+              }
+            >
+              <h2
+                className={
+                  "text-xl font-semibold dark:text-white overflow-hidden text-ellipsis " +
+                  (isSmall ? "my-1" : "my-2")
+                }
+              >
+                {title}
+              </h2>
+              {url && (
+                <a
+                  href={`https://${url}`}
+                  title={url}
+                  target="_blank"
+                  className="text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap"
+                  rel="noreferrer"
+                >
+                  {url}
+                </a>
+              )}
+              {!url && description && (
+                <p
+                  title={description}
+                  className="text-gray-500 dark:text-gray-400 mb-2 line-clamp-2"
+                >
+                  {description}
+                </p>
+              )}
+            </div>
+            {children && <div className="mt-2 text-center">{children}</div>}
+          </div>
+          <div className="absolute right-0 py-6">{Options}</div>
+        </div>
+      </Container>
     </div>
   );
 }

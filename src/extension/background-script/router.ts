@@ -20,6 +20,7 @@ const routes = {
   deleteAllowance: allowances.deleteAllowance,
   updateAllowance: allowances.updateAllowance,
   addContact: contacts.add,
+  deleteContact: contacts.deleteContact,
   getContactById: contacts.getById,
   listContacts: contacts.list,
   updateContact: contacts.updateContact,

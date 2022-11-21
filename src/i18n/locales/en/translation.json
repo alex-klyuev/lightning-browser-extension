@@ -600,7 +600,8 @@
       "contact": {
         "transaction_history": {
           "title": "Transaction History"
-        }
+        },
+        "confirm_remove": "Are you sure you want to remove this contact?"
       }
     },
     "add_contact": {

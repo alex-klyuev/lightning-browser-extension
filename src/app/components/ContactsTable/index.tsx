@@ -30,30 +30,24 @@ export default function ContactsTable({
               key={contact.id}
               className="cursor-pointer hover:bg-gray-50 transition duration-200 dark:hover:bg-neutral-800"
             >
-              <td className="px-4 py-6 whitespace-nowrap">
-                <StarIcon
-                  filled={favorite}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleFavoriteClick(contact.id);
-                  }}
-                />
+              <td
+                className="px-4 py-6 w-14 whitespace-nowrap"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFavoriteClick(contact.id);
+                }}
+              >
+                <StarIcon filled={favorite} />
               </td>
               <td
-                className="cursor-pointer px-4 py-6 whitespace-nowrap"
+                className="px-4 py-6 whitespace-nowrap"
                 onClick={() => navigateToContact(contact.id)}
               >
                 <div className="flex items-center">
                   <div className="shrink-0">
                     <img
                       className="h-12 w-12 object-cover rounded-full shadow-lg"
-                      src={"assets/icons/alby_icon_yellow_48x48.png"}
-                      //   add alt
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.onerror = null;
-                        target.src = "assets/icons/alby_icon_yellow_48x48.png";
-                      }}
+                      src={contact.imageURL}
                     />
                   </div>
                   <div className="ml-4">
@@ -77,7 +71,7 @@ export default function ContactsTable({
                 </div>
               </td>
               <td
-                className="cursor-pointer w-10"
+                className="w-10"
                 onClick={() => navigateToContact(contact.id)}
               >
                 <CaretRightIcon className="h-6 w-6 text-gray-500" />

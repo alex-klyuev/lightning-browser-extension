@@ -37,6 +37,8 @@ const persistSuccessfullPayment = async (message, data) => {
       contactId = await db.contacts.add({ lnAddress, enabled: false });
     }
 
+    await db.contacts.update(contactId, { lastPaymentAt: Date.now() });
+
     payment.contactId = contactId;
   }
 
