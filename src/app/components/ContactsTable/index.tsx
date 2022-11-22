@@ -1,5 +1,6 @@
 import { CaretRightIcon } from "@bitcoin-design/bitcoin-icons-react/filled";
 import { StarIcon } from "@components/icons";
+import { DEFAULT_PROFILE_IMAGE } from "@screens/contacts/constants";
 import { useTranslation } from "react-i18next";
 import { Contact } from "~/types";
 
@@ -47,7 +48,7 @@ export default function ContactsTable({
                   <div className="shrink-0">
                     <img
                       className="h-12 w-12 object-cover rounded-full shadow-lg"
-                      src={contact.imageURL}
+                      src={contact.imageURL || DEFAULT_PROFILE_IMAGE}
                     />
                   </div>
                   <div className="ml-4">

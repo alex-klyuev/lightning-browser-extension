@@ -1,4 +1,5 @@
 import { EllipsisIcon } from "@bitcoin-design/bitcoin-icons-react/filled";
+import Button from "@components/Button";
 import Container from "@components/Container";
 import Menu from "@components/Menu";
 import PublisherCard from "@components/PublisherCard";
@@ -10,7 +11,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSettings } from "~/app/context/SettingsContext";
+import lnurlLib from "~/common/lib/lnurl";
 import utils from "~/common/lib/utils";
+import { isLNURLDetailsError } from "~/common/utils/typeHelpers";
 import { Contact as TContact, Transaction } from "~/types";
 
 import { SaveContactActionType } from "../SaveContact";
@@ -30,8 +33,9 @@ function Contact() {
   } = useSettings();
 
   const hasFetchedData = useRef(false);
-  const [contact, setContact] = useState<TContact | undefined>();
-  const [payments, setPayments] = useState<Transaction[] | undefined>();
+  const [contact, setContact] = useState<TContact>();
+  const [payments, setPayments] = useState<Transaction[]>();
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -75,6 +79,37 @@ function Contact() {
       hasFetchedData.current = true;
     }
   }, [fetchData, isLoadingSettings]);
+
+  const navigateToLnurlPay = async () => {
+    const lnAddress = contact?.lnAddress as string;
+    let lnurlDetails;
+
+    try {
+      setLoading(true);
+
+      lnurlDetails = await lnurlLib.getDetails(lnAddress);
+
+      if (isLNURLDetailsError(lnurlDetails)) {
+        toast.error(lnurlDetails.reason);
+        return;
+      }
+
+      navigate("/lnurlPay", {
+        state: {
+          args: {
+            lnurlDetails,
+            lnAddress,
+          },
+        },
+      });
+    } catch (e) {
+      if (e instanceof Error) {
+        toast.error(e.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const Options = (
     <Menu as="div" className="relative">
@@ -125,29 +160,39 @@ function Contact() {
           title={contact?.name || ""}
           image={contact?.imageURL || ""}
           url={contact?.lnAddress}
+          urlClick={navigateToLnurlPay}
           isCard={false}
           isSmall={false}
           Options={Options}
         />
       </div>
 
-      {contact && (
-        <Container>
-          <div className="flex justify-between items-center pt-8 pb-4">
-            <dl>
-              <dt className="text-sm font-medium text-gray-500">
-                {t("contact.transaction_history.title")}
-              </dt>
-            </dl>
-          </div>
+      <Container>
+        <div className="flex justify-between items-center pt-8 pb-4">
+          <dl>
+            <dt className="text-sm font-medium text-gray-500">
+              {payments && payments?.length > 0
+                ? t("contact.transaction_history.title")
+                : t("contact.transaction_history.no_payments")}
+            </dt>
+          </dl>
 
-          <div>
-            {payments && payments?.length > 0 && (
-              <TransactionsTable transactions={payments} />
-            )}
-          </div>
-        </Container>
-      )}
+          <Button
+            type="submit"
+            label={t("contact.pay")}
+            primary
+            loading={loading}
+            disabled={loading}
+            onClick={navigateToLnurlPay}
+          />
+        </div>
+
+        <div>
+          {payments && payments?.length > 0 && (
+            <TransactionsTable transactions={payments} />
+          )}
+        </div>
+      </Container>
     </div>
   );
 }

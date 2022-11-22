@@ -599,9 +599,11 @@
       "add_contact": "Add Contact",
       "contact": {
         "transaction_history": {
-          "title": "Transaction History"
+          "title": "Transaction History",
+          "no_payments": "No payments to show."
         },
-        "confirm_remove": "Are you sure you want to remove this contact?"
+        "confirm_remove": "Are you sure you want to remove this contact?",
+        "pay": "Pay"
       }
     },
     "add_contact": {

@@ -9,8 +9,11 @@ import { ChangeEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import lnurlLib from "~/common/lib/lnurl";
 import utils from "~/common/lib/utils";
 import { Contact, DbContact } from "~/types";
+
+import { DEFAULT_PROFILE_IMAGE } from "../constants";
 
 export const enum SaveContactActionType {
   ADD = "ADD",
@@ -21,8 +24,6 @@ type SaveContactLocationState = {
   action: SaveContactActionType;
   contact: Contact;
 };
-
-const DEFAULT_IMAGE = "assets/icons/profile.jpeg";
 
 function SaveContact() {
   const { t } = useTranslation("translation", { keyPrefix: "add_contact" });
@@ -94,7 +95,13 @@ function SaveContact() {
   const isLnAddressValid = async (lnAddress: string) => {
     // empty strings
     if (!lnAddress) {
-      toast.error("Must include LN address.");
+      toast.error("Must include Lightning Address.");
+      return false;
+    }
+
+    // valid LN address
+    if (!lnurlLib.isLightningAddress(lnAddress)) {
+      toast.error("Not a valid Lightning Address.");
       return false;
     }
 
@@ -109,7 +116,7 @@ function SaveContact() {
     const { id, enabled } = contact;
 
     if (enabled && id !== contactId) {
-      toast.error("LN address associated with other contact.");
+      toast.error("Lightning Address already associated with other contact.");
       return false;
     }
 
@@ -181,7 +188,7 @@ function SaveContact() {
             <label htmlFor="file-upload" className="cursor-pointer">
               <img
                 className="m-2 mt-8 shrink-0 bg-white border-solid border-2 border-white object-cover rounded-lg shadow-2xl w-20 h-20"
-                src={imageURL || DEFAULT_IMAGE}
+                src={imageURL || DEFAULT_PROFILE_IMAGE}
               />
               <input
                 id="file-upload"

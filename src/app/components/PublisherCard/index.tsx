@@ -10,6 +10,7 @@ export type Props = {
   image?: string;
   description?: string;
   url?: string;
+  urlClick?: () => void;
   isCard?: boolean;
   isSmall?: boolean;
   Options?: React.ReactNode;
@@ -21,6 +22,7 @@ export default function PublisherCard({
   image,
   description,
   url,
+  urlClick,
   isCard = true,
   isSmall = true,
   Options,
@@ -71,17 +73,26 @@ export default function PublisherCard({
               >
                 {title}
               </h2>
-              {url && (
-                <a
-                  href={`https://${url}`}
-                  title={url}
-                  target="_blank"
-                  className="text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap"
-                  rel="noreferrer"
-                >
-                  {url}
-                </a>
-              )}
+              {url &&
+                (urlClick ? (
+                  <span
+                    title={url}
+                    className="cursor-pointer text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap"
+                    onClick={urlClick}
+                  >
+                    {url}
+                  </span>
+                ) : (
+                  <a
+                    href={`https://${url}`}
+                    title={url}
+                    target="_blank"
+                    className="text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap"
+                    rel="noreferrer"
+                  >
+                    {url}
+                  </a>
+                ))}
               {!url && description && (
                 <p
                   title={description}
