@@ -6,7 +6,12 @@ const edit = async (message: MessageAccountEdit) => {
   const accountId = message.args.id;
 
   if (accountId in accounts) {
-    accounts[accountId].name = message.args.name;
+    const { name, profileName, imageURL, links } = message.args;
+
+    if (name) accounts[accountId].name = name;
+    if (profileName) accounts[accountId].profileName = profileName;
+    if (imageURL) accounts[accountId].imageURL = imageURL;
+    if (links) accounts[accountId].links = links;
 
     state.setState({ accounts });
     // make sure we immediately persist the updated accounts

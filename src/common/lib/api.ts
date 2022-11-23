@@ -30,6 +30,9 @@ export interface AccountInfoRes {
   currentAccountId: string;
   info: { alias: string; pubkey?: string };
   name: string;
+  profileName?: string;
+  imageURL?: string;
+  links?: string[];
 }
 
 interface StatusRes {

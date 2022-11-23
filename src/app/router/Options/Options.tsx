@@ -17,6 +17,7 @@ import Unlock from "@screens/Unlock";
 import ChooseConnector from "@screens/connectors/ChooseConnector";
 import Contact from "@screens/contacts/Contact";
 import ContactsHome from "@screens/contacts/ContactsHome";
+import EditProfile from "@screens/contacts/EditProfile";
 import SaveContact from "@screens/contacts/SaveContact";
 import { useTranslation } from "react-i18next";
 import { HashRouter, Navigate, Outlet, Routes, Route } from "react-router-dom";
@@ -55,6 +56,7 @@ function Options() {
               <Route path=":id" element={<Contact />} />
               <Route index element={<ContactsHome />} />
             </Route>
+            <Route path="editProfile" element={<EditProfile />} />
             <Route path="saveContact" element={<SaveContact />} />
             <Route path="send" element={<Send />} />
             <Route path="confirmPayment" element={<ConfirmPayment />} />

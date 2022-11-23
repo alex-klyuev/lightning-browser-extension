@@ -11,6 +11,7 @@ export type Props = {
   description?: string;
   url?: string;
   urlClick?: () => void;
+  customUrl?: boolean;
   isCard?: boolean;
   isSmall?: boolean;
   Options?: React.ReactNode;
@@ -23,6 +24,7 @@ export default function PublisherCard({
   description,
   url,
   urlClick,
+  customUrl,
   isCard = true,
   isSmall = true,
   Options,
@@ -74,10 +76,12 @@ export default function PublisherCard({
                 {title}
               </h2>
               {url &&
-                (urlClick ? (
+                (customUrl ? (
                   <span
                     title={url}
-                    className="cursor-pointer text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap"
+                    className={`${
+                      urlClick && "cursor-pointer"
+                    } text-gray-500 dark:text-gray-400 overflow-hidden mb-2 text-ellipsis whitespace-nowrap`}
                     onClick={urlClick}
                   >
                     {url}

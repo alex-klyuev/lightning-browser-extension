@@ -19,6 +19,9 @@ const info = async (message: MessageAccountInfo) => {
   const result: AccountInfoRes = {
     currentAccountId: currentAccountId,
     name: currentAccount.name,
+    profileName: currentAccount.profileName,
+    imageURL: currentAccount.imageURL,
+    links: currentAccount.links,
     info: info.data,
     balance: balance.data,
   };

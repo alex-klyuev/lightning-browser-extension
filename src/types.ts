@@ -16,6 +16,16 @@ export interface Account {
   connector: ConnectorType;
   config: string;
   name: string;
+  profileName?: string;
+  imageURL?: string;
+  links?: string[];
+}
+
+export interface Profile {
+  lnAddress?: string;
+  profileName?: string;
+  imageURL?: string;
+  links?: string[];
 }
 
 export interface Accounts {
@@ -175,6 +185,9 @@ export interface MessageAccountEdit extends MessageDefault {
   args: {
     id: Account["id"];
     name: Account["name"];
+    profileName?: Account["profileName"];
+    imageURL?: Account["imageURL"];
+    links?: Account["links"];
   };
   action: "editAccount";
 }

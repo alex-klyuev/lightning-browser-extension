@@ -160,6 +160,7 @@ function Contact() {
           title={contact?.name || ""}
           image={contact?.imageURL || ""}
           url={contact?.lnAddress}
+          customUrl
           urlClick={navigateToLnurlPay}
           isCard={false}
           isSmall={false}
