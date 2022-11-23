@@ -1,9 +1,12 @@
 import { CaretDownIcon } from "@bitcoin-design/bitcoin-icons-react/filled";
 import { Disclosure } from "@headlessui/react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import Button from "~/app/components/Button";
 import { useSettings } from "~/app/context/SettingsContext";
-import { Transaction } from "~/types";
+import { SaveContactActionType } from "~/app/screens/contacts/SaveContact";
+import utils from "~/common/lib/utils";
+import { Contact, Transaction } from "~/types";
 
 import Badge from "../Badge";
 
@@ -14,6 +17,31 @@ export type Props = {
 export default function TransactionsTable({ transactions }: Props) {
   const { getFormattedSats } = useSettings();
   const { t: tComponents } = useTranslation("components");
+  const navigate = useNavigate();
+
+  const navigateToContact = (contactId: number) => {
+    // if we are in the popup
+    if (window.location.pathname !== "/options.html") {
+      utils.openPage(`options.html#/contacts/${contactId}`);
+      // close the popup
+      window.close();
+    } else {
+      navigate(`/contacts/${contactId}`);
+    }
+  };
+
+  const navigateToAddContact = async (contactId: number) => {
+    const { lnAddress } = await utils.call<Contact>("getContactById", {
+      id: contactId,
+    });
+
+    navigate("/saveContact", {
+      state: {
+        action: SaveContactActionType.ADD,
+        contact: { lnAddress },
+      },
+    });
+  };
 
   return (
     <div className="shadow overflow-hidden rounded-lg">
@@ -119,7 +147,9 @@ export default function TransactionsTable({ transactions }: Props) {
                           )}
                         </div>
                       )}
-                      {(tx.totalFees !== undefined || tx.location) && (
+                      {(tx.totalFees !== undefined ||
+                        tx.location ||
+                        tx.contactId) && (
                         <div className="my-2 flow-root">
                           {tx.totalFees !== undefined && (
                             <p className="float-left">
@@ -143,6 +173,28 @@ export default function TransactionsTable({ transactions }: Props) {
                               />
                             </a>
                           )}
+                          {tx.contactId &&
+                            (tx.contactEnabled ? (
+                              <span className="float-right">
+                                <Button
+                                  primary
+                                  label={tComponents("Open contact")}
+                                  onClick={() =>
+                                    navigateToContact(tx.contactId as number)
+                                  }
+                                />
+                              </span>
+                            ) : (
+                              <span className="float-right">
+                                <Button
+                                  primary
+                                  label={tComponents("Add contact")}
+                                  onClick={() =>
+                                    navigateToAddContact(tx.contactId as number)
+                                  }
+                                />
+                              </span>
+                            ))}
                         </div>
                       )}
                     </div>

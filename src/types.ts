@@ -524,6 +524,8 @@ export type Transaction = {
   type?: "sent" | "sending" | "received";
   value?: string;
   publisherLink?: string; // either the invoice URL if on PublisherSingleView, or the internal link to Publisher
+  contactId?: number;
+  contactEnabled?: boolean; // whether ln address is saved as contact or not
 };
 
 export interface DbPayment {

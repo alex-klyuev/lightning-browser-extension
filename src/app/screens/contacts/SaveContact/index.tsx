@@ -38,14 +38,25 @@ function SaveContact() {
   let initLnAddress = "";
   let initLinks = [""];
 
-  if (action === SaveContactActionType.EDIT) {
-    const { id, imageURL, name, lnAddress, links } = contact;
+  switch (action) {
+    case SaveContactActionType.EDIT: {
+      const { id, imageURL, name, lnAddress, links } = contact;
 
-    contactId = id;
-    initImageURL = imageURL || initImageURL;
-    initName = name || initName;
-    initLnAddress = lnAddress || initLnAddress;
-    initLinks = links || initLinks;
+      contactId = id;
+      initImageURL = imageURL || initImageURL;
+      initName = name || initName;
+      initLnAddress = lnAddress || initLnAddress;
+      initLinks = links?.length ? links : initLinks;
+
+      break;
+    }
+
+    case SaveContactActionType.ADD: {
+      // used when adding contact from payment
+      if (contact?.lnAddress) initLnAddress = contact.lnAddress;
+
+      break;
+    }
   }
 
   const [imageURL, setImageURL] = useState<string>(initImageURL);
@@ -167,7 +178,14 @@ function SaveContact() {
       }
     }
 
-    navigate(`/contacts/${contactId}`);
+    // if we are in the popup
+    if (window.location.pathname !== "/options.html") {
+      utils.openPage(`options.html#/contacts/${contactId}`);
+      // close the popup
+      window.close();
+    } else {
+      navigate(`/contacts/${contactId}`);
+    }
   };
 
   return (
@@ -176,7 +194,7 @@ function SaveContact() {
         title={t("title")}
         headerLeft={
           <IconButton
-            onClick={() => navigate("/contacts")}
+            onClick={() => navigate(-1)}
             icon={<CaretLeftIcon className="w-4 h-4" />}
           />
         }

@@ -9,6 +9,7 @@ import LNURLWithdraw from "@screens/LNURLWithdraw";
 import Receive from "@screens/Receive";
 import Send from "@screens/Send";
 import Unlock from "@screens/Unlock";
+import SaveContact from "@screens/contacts/SaveContact";
 import { HashRouter, Outlet, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Providers from "~/app/context/Providers";
@@ -37,6 +38,7 @@ function Popup() {
             <Route path="keysend" element={<Keysend />} />
             <Route path="confirmPayment" element={<ConfirmPayment />} />
             <Route path="lnurlAuth" element={<LNURLAuth />} />
+            <Route path="saveContact" element={<SaveContact />} />
           </Route>
           <Route
             path="unlock"

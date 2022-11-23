@@ -18,7 +18,7 @@ import { PublisherLnData } from "~/app/screens/Home/PublisherLnData";
 import { classNames } from "~/app/utils/index";
 import api from "~/common/lib/api";
 import utils from "~/common/lib/utils";
-import type { Battery, Transaction } from "~/types";
+import type { Battery, Contact, Transaction } from "~/types";
 
 dayjs.extend(relativeTime);
 
@@ -91,7 +91,15 @@ const DefaultView: FC<Props> = (props) => {
             ? await getFormattedFiat(payment.totalAmount)
             : "";
           payment.totalAmountFiat = totalAmountFiat;
+
+          if (payment.contactId) {
+            const { enabled } = await utils.call<Contact>("getContactById", {
+              id: payment.contactId,
+            });
+            payment.contactEnabled = enabled;
+          }
         }
+
         setPayments(payments);
       } catch (e) {
         console.error(e);
