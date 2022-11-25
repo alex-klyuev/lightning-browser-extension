@@ -52,8 +52,11 @@ function SaveContact() {
     }
 
     case SaveContactActionType.ADD: {
-      // used when adding contact from payment
+      // used for autofills (like coming from payment or importing vCard)
+      if (contact?.name) initName = contact.name;
       if (contact?.lnAddress) initLnAddress = contact.lnAddress;
+      if (contact?.imageURL) initImageURL = contact.imageURL;
+      if (contact?.links) initLinks = contact.links;
 
       break;
     }

@@ -1,17 +1,23 @@
-import { EllipsisIcon } from "@bitcoin-design/bitcoin-icons-react/filled";
+import {
+  EllipsisIcon,
+  SendIcon,
+} from "@bitcoin-design/bitcoin-icons-react/filled";
 import Button from "@components/Button";
 import ContactsTable from "@components/ContactsTable";
 import Container from "@components/Container";
 import Menu from "@components/Menu";
 import PublisherCard from "@components/PublisherCard";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { parse } from "vcard4";
+import { ParsedVcard } from "vcard4/lib/esm/parse";
+import { downloadVCard } from "~/app/utils/vcf";
 import { AccountInfoRes } from "~/common/lib/api";
 import lnurlLib from "~/common/lib/lnurl";
 import utils from "~/common/lib/utils";
-import { Contact, Profile } from "~/types";
+import { Contact, DbContact, Profile } from "~/types";
 
 import { SaveContactActionType } from "../SaveContact";
 
@@ -72,6 +78,55 @@ function ContactsHome() {
 
   const favoritesArray = Object.values(favorites);
   const generalArray = Object.values(general);
+
+  const readFile = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result as string);
+      fr.onerror = reject;
+      fr.readAsText(file);
+    });
+  };
+
+  const handleVCardUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files) {
+      const vCardFile = files[0];
+      if (!vCardFile) return;
+      const vCard = await readFile(vCardFile);
+      const parsed = parse(vCard) as ParsedVcard;
+      const contact: DbContact = {
+        lnAddress: "",
+        links: [],
+      };
+
+      parsed.parsedVcard.forEach((attribute) => {
+        const { property, value } = attribute;
+
+        switch (property) {
+          case "FN":
+            contact.name = value;
+            break;
+
+          case "X-LIGHTNINGADDRESS":
+            contact.lnAddress = value;
+            break;
+
+          case "PHOTO":
+            contact.imageURL = value;
+            break;
+
+          case "URL":
+            contact.links?.push(value);
+            break;
+        }
+      });
+
+      navigate("/saveContact", {
+        state: { action: SaveContactActionType.ADD, contact },
+      });
+    }
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -154,15 +209,11 @@ function ContactsHome() {
       </Menu.Button>
 
       <Menu.List position="right">
-        <Menu.ItemButton onClick={() => navigateToEditProfile()}>
+        <Menu.ItemButton onClick={navigateToEditProfile}>
           {tCommon("actions.edit")}
         </Menu.ItemButton>
 
-        <Menu.ItemButton
-          onClick={() => {
-            console.info("placeholder");
-          }}
-        >
+        <Menu.ItemButton onClick={() => downloadVCard(profile as Profile)}>
           {tCommon("actions.export")}
         </Menu.ItemButton>
       </Menu.List>
@@ -204,7 +255,7 @@ function ContactsHome() {
         ) : null}
 
         <div className="py-4 flex justify-between items-center">
-          <div>
+          <div className="flex-grow">
             <h2 className="mt-12 mb-2 text-2xl font-bold dark:test-white">
               {t("general.title")}
             </h2>
@@ -212,6 +263,25 @@ function ContactsHome() {
             <p className="mb-6 text-gray-500 dark:text-neutral-500">
               {t("general.description")}
             </p>
+          </div>
+
+          <div className="flex mx-2">
+            <label htmlFor="file-upload" className="cursor-pointer">
+              <div
+                className="flex-row px-7 py-2 bg-white text-gray-700 dark:bg-surface-02dp dark:text-neutral-200 dark:border-neutral-800 hover:bg-gray-50 dark:hover:bg-surface-16dp
+              inline-flex justify-center items-center font-medium rounded-md shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-orange-bitcoin transition duration-150"
+              >
+                <SendIcon className="w-6 h-6" />
+              </div>
+              <input
+                id="file-upload"
+                name="file-upload"
+                type="file"
+                accept=".vcf"
+                className="sr-only"
+                onChange={handleVCardUpload}
+              />
+            </label>
           </div>
 
           <Button

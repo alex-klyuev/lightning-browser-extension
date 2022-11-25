@@ -9598,6 +9598,16 @@ vary@~1.1.2:
   resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
+vcard4@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/vcard4/-/vcard4-3.1.5.tgz#2e568325a3abd33d596292331a134cf4bfbf7cbd"
+  integrity sha512-mdX/pS2fF7uvgzdtP7K6J1cyfWWcJmpJD9Dn/mq9/WrhI9l2cWj71vTKVQCrpBUaLUBHr/vi7F/EPf/cTzCRFw==
+
+vcards-js@^2.10.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/vcards-js/-/vcards-js-2.10.0.tgz#70871c3c6f1f154ae0b4925d761bfe7ac2c8502a"
+  integrity sha512-nah+xbVInVJaO6+C5PEUqaougmv8BN8aa7ZCtmVQcX6eWIZGRukckFtseXSI7KD7/nXtwkJe624y42T0r+L+AQ==
+
 void-elements@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-3.1.0.tgz#614f7fbf8d801f0bb5f0661f5b2f5785750e4f09"
